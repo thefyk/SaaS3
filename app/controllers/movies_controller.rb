@@ -8,6 +8,13 @@ class MoviesController < ApplicationController
 
   def index
     
+if params[:ratings].nil? && params[:order_field].nil?
+ if !session[:order_field].nil? || !session[:ratings].nil?
+    flash.keep
+    redirect_to movies_path(:order_field=>session[:order_field], :ratings=>session[:ratings]) 
+    return
+ end
+end
 
     if params[:order_field].nil?
     field = session[:order_field]

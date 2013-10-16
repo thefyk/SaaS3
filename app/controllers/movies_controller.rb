@@ -7,17 +7,34 @@ class MoviesController < ApplicationController
   end
 
   def index
+    
+
+    if params[:order_field].nil?
+    field = session[:order_field]
+    else
     field = params[:order_field]
+    session[:order_field] = params[:order_field]
+  end
+
     @order_field = field
+
+
     @all_ratings = Movie.getratings
 
+
     if params[:ratings].nil?
-      @ratings1 = @all_ratings
+      if session[:ratings].nil?
+        @ratings1 = @all_ratings
+      else
+      @ratings1 = session[:ratings].keys
+      @ratings = session[:ratings]
+    end
     else
+    session[:ratings] = params[:ratings]
     @ratings1 = params[:ratings].keys
     @ratings = params[:ratings]
-
   end
+
 
    @movies = Movie.where(:rating => @ratings1).order(field)
 
